@@ -9,4 +9,4 @@
 
 Helper functions for sql mock.
 
-It is a wrapper of [DATA-DOG/go-sqlmock](https://github.com/DATA-DOG/go-sqlmock) to ease your work.
+It is a wrapper of [DATA-DOG/go-sqlmock](https://github.com/DATA-DOG/go-sqlmock) to ease your work on mocking sql in unit tests.

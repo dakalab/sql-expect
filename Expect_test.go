@@ -41,19 +41,6 @@ func (suite *ExpectTestSuite) TearDownSuite() {
 	log.Println("Expect Tests End")
 }
 
-func (suite *ExpectTestSuite) TestUpdate() {
-	Update(suite.mock, suite.table, nil, 1)
-	res, err := suite.db.Exec("UPDATE " + suite.table + " SET value = 2 WHERE id = 1")
-	suite.NoError(err)
-	rowsAffected, err := res.RowsAffected()
-	suite.NoError(err)
-	suite.Equal(int64(1), rowsAffected)
-
-	Update(suite.mock, suite.table, errors.New("db error"), 0)
-	_, err = suite.db.Exec("UPDATE " + suite.table + " SET value = 2 WHERE id = 1")
-	suite.Error(err)
-}
-
 func (suite *ExpectTestSuite) TestSelect() {
 	Select(suite.mock, suite.table, suite.columns, errors.New("db error"))
 	_, err := suite.db.Query("SELECT * FROM " + suite.table)
@@ -75,6 +62,19 @@ func (suite *ExpectTestSuite) TestSelect() {
 		suite.Equal(1, id)
 		suite.Equal(2, value)
 	}
+}
+
+func (suite *ExpectTestSuite) TestUpdate() {
+	Update(suite.mock, suite.table, nil, 1)
+	res, err := suite.db.Exec("UPDATE " + suite.table + " SET value = 2 WHERE id = 1")
+	suite.NoError(err)
+	rowsAffected, err := res.RowsAffected()
+	suite.NoError(err)
+	suite.Equal(int64(1), rowsAffected)
+
+	Update(suite.mock, suite.table, errors.New("db error"), 0)
+	_, err = suite.db.Exec("UPDATE " + suite.table + " SET value = 2 WHERE id = 1")
+	suite.Error(err)
 }
 
 func (suite *ExpectTestSuite) TestInsert() {

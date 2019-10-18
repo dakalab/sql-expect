@@ -56,19 +56,6 @@ func (suite *ModelTestSuite) TearDownSuite() {
 	log.Println("Model Tests End")
 }
 
-func (suite *ModelTestSuite) TestUpdateModel() {
-	UpdateModel(suite.model, nil, 1)
-	res, err := suite.db.Exec("UPDATE " + suite.model.TableName() + " SET value = 2 WHERE id = 1")
-	suite.NoError(err)
-	rowsAffected, err := res.RowsAffected()
-	suite.NoError(err)
-	suite.Equal(int64(1), rowsAffected)
-
-	UpdateModel(suite.model, errors.New("db error"), 0)
-	_, err = suite.db.Exec("UPDATE " + suite.model.TableName() + " SET value = 2 WHERE id = 1")
-	suite.Error(err)
-}
-
 func (suite *ModelTestSuite) TestSelect() {
 	SelectModel(suite.model, errors.New("db error"))
 	_, err := suite.db.Query("SELECT * FROM " + suite.model.TableName())
@@ -90,6 +77,19 @@ func (suite *ModelTestSuite) TestSelect() {
 		suite.Equal(1, id)
 		suite.Equal(2, value)
 	}
+}
+
+func (suite *ModelTestSuite) TestUpdate() {
+	UpdateModel(suite.model, nil, 1)
+	res, err := suite.db.Exec("UPDATE " + suite.model.TableName() + " SET value = 2 WHERE id = 1")
+	suite.NoError(err)
+	rowsAffected, err := res.RowsAffected()
+	suite.NoError(err)
+	suite.Equal(int64(1), rowsAffected)
+
+	UpdateModel(suite.model, errors.New("db error"), 0)
+	_, err = suite.db.Exec("UPDATE " + suite.model.TableName() + " SET value = 2 WHERE id = 1")
+	suite.Error(err)
 }
 
 func (suite *ModelTestSuite) TestInsert() {
