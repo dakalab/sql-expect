@@ -76,3 +76,8 @@ func Delete(mock sqlmock.Sqlmock, table string, err error, rowsAffected int64) {
 
 	mock.ExpectExec(sql).WillReturnResult(sqlmock.NewResult(0, rowsAffected))
 }
+
+// Count expects db count
+func Count(mock sqlmock.Sqlmock, table string, err error, count uint32) {
+	Select(mock, table, []string{"count(*)"}, err, []driver.Value{count})
+}
